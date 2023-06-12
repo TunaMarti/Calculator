@@ -49,7 +49,7 @@ const ArrayNumberButton: React.FC<IProps> = (props) => {
             <NumberButton
               key={"_" + i + "_" + j}
               title={inner}
-              onPress={() => onButtonClick(item)}
+              onPress={() => onButtonClick(inner)}
               style={styles.button}
             ></NumberButton>
           ))}
