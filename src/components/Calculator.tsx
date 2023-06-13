@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
-import PreviousEquationText from "../../PreviousEquationText";
-import ResultText from "../../ResultText";
+import PreviousEquationText from "./PreviousEquationText";
+import ResultText from "./ResultText";
 import ArrButtons from "./ArrButtons";
 
 export default function Calculator() {
@@ -31,15 +31,6 @@ export default function Calculator() {
 
   const newNumberButtonClick = (newValue: string) => {
     if (newValue != "Geri Al") {
-      console.log(
-        resultNumber,
-        previousEquationText.length,
-        "xxxxx",
-        previousEquationText,
-        functionHolder,
-        functionHolder.length,
-        previousEquationText.length > 0 && functionHolder.length == 0
-      );
       if (functionHolder.length == 0 && isNewEqu) {
         setIsNewEqu(false);
         setResultText(newValue);
@@ -53,7 +44,6 @@ export default function Calculator() {
   const newFunctionButtonClick = (newValue: string) => {
     if (newValue != "=") {
       functionHolder.push(newValue);
-      console.log(functionHolder);
       setResultText(resultText + newValue);
     } else {
       calculate(resultText);
@@ -70,10 +60,8 @@ export default function Calculator() {
       resultText = resultText.slice(1);
       splitted = resultText.split(/[x+-/]/);
       splitted[0] = (parseFloat(splitted[0]) * -1).toString();
-      console.log("splitted[0]: " + splitted[0]);
     }
 
-    console.log("Splitted: " + splitted);
     for (let index = 0; index < splitted.length; index++) {
       switch (functionHolder[index]) {
         case "+":
@@ -119,7 +107,6 @@ export default function Calculator() {
             onClick={newFunctionButtonClick}
             bgColor="#d2d3da"
           />
-
           <ArrButtons
             titles={numberButtons}
             column={3}
