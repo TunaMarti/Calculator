@@ -63,7 +63,7 @@ export default ArrayNumberButton;
 
 const styles = StyleSheet.create({
   grid: {
-    flexDirection: "row",
+    flexDirection: "row-reverse",
   },
   container: {
     color: "#ffffff",

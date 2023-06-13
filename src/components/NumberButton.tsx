@@ -33,6 +33,7 @@ export default NumberButton;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#ffffff",
+    margin: 5,
     borderRadius: 8,
   },
   button: {

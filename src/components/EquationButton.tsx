@@ -1,13 +1,13 @@
 import { Text, TouchableOpacity, StyleSheet, View } from "react-native";
 import React, { Component, ComponentProps } from "react";
 
-type FunctionButtonProps = ComponentProps<typeof View> & {
+type EquationButtonProps = ComponentProps<typeof View> & {
   title: string;
   selected?: boolean;
   onPress: () => void;
 };
 
-const FunctionButton: React.FC<FunctionButtonProps> = ({
+const EquationButton: React.FC<EquationButtonProps> = ({
   title,
   onPress,
   ...restOfProp
@@ -28,11 +28,11 @@ const FunctionButton: React.FC<FunctionButtonProps> = ({
   );
 };
 
-export default FunctionButton;
+export default EquationButton;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#d2d3da",
+    backgroundColor: "#4b5efc",
     margin: 5,
     borderRadius: 8,
   },
