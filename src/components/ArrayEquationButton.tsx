@@ -1,6 +1,6 @@
 import React, { ComponentProps, useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import NumberButton from "./EquationButton";
+import TextButton from "./TextButton";
 
 type IProps = ComponentProps<typeof View> & {
   titles: string[];
@@ -20,12 +20,13 @@ const ArrayEquationButton: React.FC<IProps> = (props) => {
     <View style={styles.container}>
       {props.titles.map((item, i) => {
         return (
-          <NumberButton
+          <TextButton
             key={"_" + i}
             title={item}
             onPress={() => onButtonClick(item)}
             style={styles.button}
-          ></NumberButton>
+            bgColor="#4b5efc"
+          ></TextButton>
         );
       })}
     </View>
@@ -36,7 +37,6 @@ export default ArrayEquationButton;
 
 const styles = StyleSheet.create({
   container: {
-    color: "#ffffff",
     flexDirection: "column",
   },
   button: {
