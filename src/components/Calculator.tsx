@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import PreviousEquationText from "./PreviousEquationText";
 import ResultText from "./ResultText";
 import ArrButtons from "./ArrButtons";
+import { reverseString } from "./HelperFunctions";
 
 export default function Calculator() {
   const functionButtons = ["C", "+/-", "%"];
@@ -38,33 +39,119 @@ export default function Calculator() {
         setResultText(resultText + newValue);
       }
     } else {
+      if (
+        (resultText.length == 1 && resultText[resultText.length - 1] == "+") ||
+        "-" ||
+        "*" ||
+        "/" ||
+        "%"
+      ) {
+        functionHolder.pop();
+      }
       setResultText(resultText.slice(0, -1));
     }
   };
   const newFunctionButtonClick = (newValue: string) => {
-    if (newValue != "=") {
-      functionHolder.push(newValue);
-      setResultText(resultText + newValue);
-    } else {
-      calculate(resultText);
-      setIsNewEqu(true);
-      setFunctionHolder([]);
+    console.log("NewVALUE: ", newValue, functionHolder);
+    switch (newValue) {
+      case "/":
+        functionHolder.push(newValue);
+        setResultText(resultText + newValue);
+        break;
+
+      case "x":
+        functionHolder.push(newValue);
+        setResultText(resultText + newValue);
+        break;
+
+      case "-":
+        functionHolder.push(newValue);
+        setResultText(resultText + newValue);
+        break;
+
+      case "+":
+        functionHolder.push(newValue);
+        setResultText(resultText + newValue);
+        break;
+
+      case "%":
+        functionHolder.push(newValue);
+        setResultText(resultText + newValue);
+        break;
+      case "=":
+        calculate(resultText);
+        setIsNewEqu(true);
+        setFunctionHolder([]);
+        break;
+      case "C":
+        setResultText("");
+        setPreviousEquationText("");
+        setFunctionHolder([]);
+        break;
+      case "+/-":
+        var lastOp = functionHolder[functionHolder.length - 1];
+        console.log("lastOp", lastOp, "functionHolder: ", functionHolder);
+        if (lastOp == "+") {
+          lastOp = "-";
+          setResultText(
+            reverseString(reverseString(resultText).replace("+", "-"))
+          );
+          console.log("replace to negative" + resultText.replace("+", "-"));
+          functionHolder.pop();
+          functionHolder.push(lastOp);
+        } else if (lastOp == "-") {
+          lastOp = "+";
+          console.log(
+            "replace to positive" + reverseString(resultText).replace("-", "+")
+          );
+          setResultText(
+            reverseString(reverseString(resultText).replace("-", "+"))
+          );
+          functionHolder.pop();
+          functionHolder.push(lastOp);
+        } else if (lastOp == undefined) {
+          lastOp = "-";
+          setResultText(lastOp + resultText);
+
+          functionHolder.push(lastOp);
+        }
+        break;
+
+      default:
+        break;
     }
+
+    console.log("AFTER NewVALUE: ", newValue, functionHolder);
+    // if (newValue != "=") {
+    //   functionHolder.push(newValue);
+    //   setResultText(resultText + newValue);
+    // }
+    // if ((newValue = "C")) {
+    //   setResultText("");
+    // } else {
+    //   calculate(resultText);
+    //   setIsNewEqu(true);
+    //   setFunctionHolder([]);
+    // }
   };
   const calculate = (resultText: string) => {
     var splitted: string[] = [];
     if (resultText.charAt(0) != "-") {
-      splitted = resultText.split(/[x+-/]/);
-      setFunctionHolder([]);
+      splitted = resultText.split(/[x+-/%]/);
+      //   setFunctionHolder([]);
     } else {
       resultText = resultText.slice(1);
-      splitted = resultText.split(/[x+-/]/);
+      splitted = resultText.split(/[x+-/%]/);
       splitted[0] = (parseFloat(splitted[0]) * -1).toString();
     }
-
+    console.log(functionHolder, "SPLITTTTTTED", splitted);
     for (let index = 0; index < splitted.length; index++) {
       switch (functionHolder[index]) {
         case "+":
+          console.log(
+            "topla",
+            parseFloat(splitted[index]) + parseFloat(splitted[index + 1])
+          );
           splitted[index + 1] = (
             parseFloat(splitted[index]) + parseFloat(splitted[index + 1])
           ).toString();
@@ -84,16 +171,30 @@ export default function Calculator() {
             parseFloat(splitted[index]) * parseFloat(splitted[index + 1])
           ).toString();
           break;
+        case "%":
+          splitted[index + 1] = (
+            parseFloat(splitted[index]) % parseFloat(splitted[index + 1])
+          ).toString();
+          break;
 
         default:
           break;
       }
+      console.log(
+        functionHolder,
+        splitted[splitted.length - 1],
+        "splitted: " + splitted
+      );
       setResultNumber(parseFloat(splitted[splitted.length - 1]));
       setPreviousEquationText(resultText + "=" + splitted[splitted.length - 1]);
     }
     setResultText(splitted[splitted.length - 1]);
     splitted = [];
   };
+
+  useEffect(() => {
+    console.log("fncHolder: ", functionHolder);
+  }, [functionHolder]);
 
   return (
     <View style={styles.container}>
