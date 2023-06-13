@@ -1,6 +1,6 @@
 import React, { ComponentProps, useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import NumberButton from "./NumberButton";
+import TextButton from "./TextButton";
 
 type IProps = ComponentProps<typeof View> & {
   titles: string[];
@@ -46,12 +46,13 @@ const ArrayNumberButton: React.FC<IProps> = (props) => {
       {gridArray.map((outer, i) => (
         <View key={"_" + i} style={styles.grid}>
           {outer.map((inner, j) => (
-            <NumberButton
+            <TextButton
               key={"_" + i + "_" + j}
               title={inner}
               onPress={() => onButtonClick(inner)}
               style={styles.button}
-            ></NumberButton>
+              bgColor="#ffffff"
+            ></TextButton>
           ))}
         </View>
       ))}
@@ -66,7 +67,6 @@ const styles = StyleSheet.create({
     flexDirection: "row-reverse",
   },
   container: {
-    color: "#ffffff",
     flexDirection: "column",
   },
   button: {

@@ -1,38 +1,38 @@
 import { Text, TouchableOpacity, StyleSheet, View } from "react-native";
-import React, { Component, ComponentProps } from "react";
+import React, { ComponentProps } from "react";
 
-type EquationButtonProps = ComponentProps<typeof View> & {
+type NumberButtonProps = ComponentProps<typeof View> & {
   title: string;
   selected?: boolean;
   onPress: () => void;
+  bgColor?: string;
 };
 
-const EquationButton: React.FC<EquationButtonProps> = ({
+const TextButton: React.FC<NumberButtonProps> = ({
   title,
   onPress,
+  bgColor,
   ...restOfProp
 }) => {
-  const onClick = () => {
-    // ada a sd
-    onPress();
-  };
-
   return (
     <TouchableOpacity
       {...restOfProp}
-      style={[styles.container, restOfProp.style]}
-      onPress={onClick}
+      style={[
+        styles.container,
+        restOfProp.style,
+        { backgroundColor: bgColor ?? "#ffffff" },
+      ]}
+      onPress={onPress}
     >
       <Text style={styles.button}>{title}</Text>
     </TouchableOpacity>
   );
 };
 
-export default EquationButton;
+export default TextButton;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#4b5efc",
     margin: 5,
     borderRadius: 8,
   },
