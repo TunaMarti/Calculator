@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import PreviousEquationText from "../../PreviousEquationText";
 import ResultText from "../../ResultText";
-import ArrayEquationButton from "./ArrayEquationButton";
-import ArrayFunctionButton from "./ArrayFunctionButton";
-import ArrayNumberButton from "./ArrayNumberButton";
+import ArrButtons from "./ArrButtons";
 
 export default function Calculator() {
   const functionButtons = ["C", "+/-", "%"];
@@ -115,22 +113,24 @@ export default function Calculator() {
       <ResultText title={resultText} />
       <View style={styles.numpad}>
         <View>
-          <ArrayFunctionButton
+          <ArrButtons
             titles={functionButtons}
             column={3}
             onClick={newFunctionButtonClick}
+            bgColor="#d2d3da"
           />
 
-          <ArrayNumberButton
+          <ArrButtons
             titles={numberButtons}
             column={3}
             onClick={newNumberButtonClick}
           />
         </View>
-        <ArrayEquationButton
+        <ArrButtons
           titles={equationButtons}
           column={1}
           onClick={newFunctionButtonClick}
+          bgColor="#4b5efc"
         />
       </View>
     </View>
