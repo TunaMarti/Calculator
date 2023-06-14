@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import PreviousEquationText from "./PreviousEquationText";
 import ResultText from "./ResultText";
 import ArrButtons from "./ArrButtons";
 import { reverseString } from "./HelperFunctions";
+import math from "mathjs";
 
 export default function Calculator() {
   const functionButtons = ["C", "+/-", "%"];
@@ -39,109 +40,103 @@ export default function Calculator() {
         setResultText(resultText + newValue);
       }
     } else {
+      let lastOp = resultText[resultText.length - 1];
       if (
-        (resultText.length == 1 && resultText[resultText.length - 1] == "+") ||
-        "-" ||
-        "*" ||
-        "/" ||
-        "%"
+        resultText.length == 1 &&
+        (lastOp == "+" ||
+          lastOp == "-" ||
+          lastOp == "x" ||
+          lastOp == "/" ||
+          lastOp == "%")
       ) {
         functionHolder.pop();
       }
+      functionHolder.pop();
       setResultText(resultText.slice(0, -1));
     }
   };
   const newFunctionButtonClick = (newValue: string) => {
     console.log("NewVALUE: ", newValue, functionHolder);
-    switch (newValue) {
-      case "/":
+    if (
+      newValue == "+" ||
+      newValue == "-" ||
+      newValue == "x" ||
+      newValue == "/" ||
+      newValue == "%"
+    ) {
+      if ("+-x/%".includes(resultText[resultText.length - 1])) {
+        return;
+      } else if (resultText.length == 0) {
+        setResultText(resultText + newValue);
+      } else {
         functionHolder.push(newValue);
         setResultText(resultText + newValue);
-        break;
+      }
 
-      case "x":
-        functionHolder.push(newValue);
-        setResultText(resultText + newValue);
-        break;
-
-      case "-":
-        functionHolder.push(newValue);
-        setResultText(resultText + newValue);
-        break;
-
-      case "+":
-        functionHolder.push(newValue);
-        setResultText(resultText + newValue);
-        break;
-
-      case "%":
-        functionHolder.push(newValue);
-        setResultText(resultText + newValue);
-        break;
-      case "=":
-        calculate(resultText);
-        setIsNewEqu(true);
-        setFunctionHolder([]);
-        break;
-      case "C":
-        setResultText("");
-        setPreviousEquationText("");
-        setFunctionHolder([]);
-        break;
-      case "+/-":
-        var lastOp = functionHolder[functionHolder.length - 1];
-        console.log("lastOp", lastOp, "functionHolder: ", functionHolder);
-        if (lastOp == "+") {
-          lastOp = "-";
-          setResultText(
-            reverseString(reverseString(resultText).replace("+", "-"))
-          );
-          console.log("replace to negative" + resultText.replace("+", "-"));
-          functionHolder.pop();
-          functionHolder.push(lastOp);
-        } else if (lastOp == "-") {
-          lastOp = "+";
-          console.log(
-            "replace to positive" + reverseString(resultText).replace("-", "+")
-          );
-          setResultText(
-            reverseString(reverseString(resultText).replace("-", "+"))
-          );
-          functionHolder.pop();
-          functionHolder.push(lastOp);
-        } else if (lastOp == undefined) {
-          lastOp = "-";
-          setResultText(lastOp + resultText);
-
-          functionHolder.push(lastOp);
-        }
-        break;
-
-      default:
-        break;
-    }
-
-    console.log("AFTER NewVALUE: ", newValue, functionHolder);
-    // if (newValue != "=") {
-    //   functionHolder.push(newValue);
-    //   setResultText(resultText + newValue);
-    // }
-    // if ((newValue = "C")) {
-    //   setResultText("");
-    // } else {
-    //   calculate(resultText);
-    //   setIsNewEqu(true);
-    //   setFunctionHolder([]);
-    // }
+      console.log(
+        "Function holder after clicked an operator ",
+        functionHolder,
+        "\n"
+      );
+    } else
+      switch (newValue) {
+        case "=":
+          calculate(resultText);
+          setIsNewEqu(true);
+          setFunctionHolder([]);
+          break;
+        case "C":
+          setResultText("");
+          setPreviousEquationText("");
+          setFunctionHolder([]);
+          break;
+        case "+/-":
+          var lastOp = functionHolder[functionHolder.length - 1];
+          console.log("lastOp", lastOp, "functionHolder: ", functionHolder);
+          //-----------------FUNCTION HOLDER BOSKEN BASILDIGINDA--------------------
+          if (functionHolder.length == 0) {
+            if (resultText.charAt(0) != "-") setResultText("-" + resultText);
+            else {
+              setResultText(resultText.slice(1));
+            }
+          }
+          //-----------------FUNCTION HOLDER DOLUYKEN BASILDIGINDA--------------------
+          else {
+            if (lastOp == "+") {
+              lastOp = "-";
+              setResultText(
+                reverseString(reverseString(resultText).replace("+", "-"))
+              );
+              console.log("replace to negative" + resultText.replace("+", "-"));
+              functionHolder.pop();
+              functionHolder.push(lastOp);
+            } else if (lastOp == "-") {
+              lastOp = "+";
+              console.log(
+                "replace to positive" +
+                  reverseString(resultText).replace("-", "+")
+              );
+              setResultText(
+                reverseString(reverseString(resultText).replace("-", "+"))
+              );
+              functionHolder.pop();
+              functionHolder.push(lastOp);
+            }
+          }
+          break;
+        default:
+          break;
+      }
   };
   const calculate = (resultText: string) => {
     var splitted: string[] = [];
     if (resultText.charAt(0) != "-") {
-      splitted = resultText.split(/[x+-/%]/);
+      splitted = resultText.split(/[x+\-%/]/);
+
       //   setFunctionHolder([]);
     } else {
       resultText = resultText.slice(1);
-      splitted = resultText.split(/[x+-/%]/);
+      splitted = resultText.split(/[x+\-%/]/);
       splitted[0] = (parseFloat(splitted[0]) * -1).toString();
     }
     console.log(functionHolder, "SPLITTTTTTED", splitted);
@@ -183,7 +178,8 @@ export default function Calculator() {
       console.log(
         functionHolder,
         splitted[splitted.length - 1],
-        "splitted: " + splitted
+        "splitted: ",
+        splitted
       );
       setResultNumber(parseFloat(splitted[splitted.length - 1]));
       setPreviousEquationText(resultText + "=" + splitted[splitted.length - 1]);
@@ -201,7 +197,7 @@ export default function Calculator() {
       <PreviousEquationText title={previousEquationText} />
       <ResultText title={resultText} />
       <View style={styles.numpad}>
-        <View>
+        <View style={styles.sayiVeFunc}>
           <ArrButtons
             titles={functionButtons}
             column={3}
@@ -214,12 +210,14 @@ export default function Calculator() {
             onClick={newNumberButtonClick}
           />
         </View>
-        <ArrButtons
-          titles={equationButtons}
-          column={1}
-          onClick={newFunctionButtonClick}
-          bgColor="#4b5efc"
-        />
+        <View style={styles.oparator}>
+          <ArrButtons
+            titles={equationButtons}
+            column={1}
+            onClick={newFunctionButtonClick}
+            bgColor="#4b5efc"
+          />
+        </View>
       </View>
     </View>
   );
@@ -230,14 +228,26 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     backgroundColor: "#ececec",
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
   },
   numpad: {
-    flex: 1,
+    flex: 3,
     flexDirection: "row",
     backgroundColor: "#ececec",
-    alignItems: "center",
+    // alignItems: "center",
+  },
+  sayiVeFunc: {
+    flex: 3,
+    flexDirection: "column",
+    backgroundColor: "#ececec",
+    // alignItems: "center",
+    justifyContent: "center",
+  },
+  oparator: {
+    flex: 1,
+    flexDirection: "column",
+    backgroundColor: "#ececec",
+    // alignItems: "center",
     justifyContent: "center",
   },
 });

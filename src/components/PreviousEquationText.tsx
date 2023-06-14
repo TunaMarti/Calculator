@@ -11,7 +11,7 @@ const PreviousEquationText: React.FC<PreviousEquationTextProps> = ({
   ...restOfProp
 }) => {
   return (
-    <View {...restOfProp}>
+    <View {...restOfProp} style={styles.container}>
       <Text style={styles.previousEquationText}>{title}</Text>
     </View>
   );
@@ -21,12 +21,13 @@ export default PreviousEquationText;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ffffff",
+    flex: 1,
+    backgroundColor: "#ececec",
     borderRadius: 8,
   },
   previousEquationText: {
     margin: 5,
-    textAlign: "center",
+    textAlign: "left",
     fontSize: 25,
   },
 });

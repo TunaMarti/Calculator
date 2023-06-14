@@ -18,11 +18,13 @@ export default ResultText;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignContent: "flex-end",
+    backgroundColor: "#ececec",
   },
   resultText: {
     margin: 5,
     fontSize: 50,
-    textAlign: "right",
+    textAlign: "center",
   },
 });

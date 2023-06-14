@@ -52,12 +52,16 @@ export default ArrButtons;
 const styles = StyleSheet.create({
   grid: {
     flexDirection: "row-reverse",
+
+    // flex: 3,
   },
   container: {
     flexDirection: "column",
+    justifyContent: "center",
   },
   button: {
     marginHorizontal: 10,
-    minWidth: 80,
+    flex: 1,
+    // minWidth: 100,
   },
 });
