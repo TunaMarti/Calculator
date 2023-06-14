@@ -7,7 +7,7 @@ import { reverseString } from "./HelperFunctions";
 import math from "mathjs";
 
 export default function Calculator() {
-  const functionButtons = ["C", "+/-", "%"];
+  const functionButtons = ["+/-", "%", "C"];
   const numberButtons = [
     "9",
     "8",
