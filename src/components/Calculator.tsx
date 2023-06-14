@@ -40,19 +40,41 @@ export default function Calculator() {
         setResultText(resultText + newValue);
       }
     } else {
-      let lastOp = resultText[resultText.length - 1];
+      console.log("Geri ala basıldı");
+      let lastChar = resultText[resultText.length - 1];
+      console.log("lastChar", lastChar);
       if (
-        resultText.length == 1 &&
-        (lastOp == "+" ||
-          lastOp == "-" ||
-          lastOp == "x" ||
-          lastOp == "/" ||
-          lastOp == "%")
+        (lastChar == "x" ||
+          lastChar == "-" ||
+          lastChar == "+" ||
+          lastChar == "/" ||
+          lastChar == "%") &&
+        resultText.length > 1
       ) {
+        console.log("1. ife girdi");
         functionHolder.pop();
+        setResultText(resultText.slice(0, -1));
+      } else if (
+        (lastChar == "x" ||
+          lastChar == "-" ||
+          lastChar == "+" ||
+          lastChar == "/" ||
+          lastChar == "%") &&
+        resultText.length == 1
+      ) {
+        console.log("1. ife girdi");
+        setResultText(resultText.slice(0, -1));
+      } else if (
+        !(
+          lastChar == "x" ||
+          lastChar == "-" ||
+          lastChar == "+" ||
+          lastChar == "/" ||
+          lastChar == "%"
+        )
+      ) {
+        setResultText(resultText.slice(0, -1));
       }
-      functionHolder.pop();
-      setResultText(resultText.slice(0, -1));
     }
   };
   const newFunctionButtonClick = (newValue: string) => {
@@ -140,6 +162,8 @@ export default function Calculator() {
       splitted[0] = (parseFloat(splitted[0]) * -1).toString();
     }
     console.log(functionHolder, "SPLITTTTTTED", splitted);
+    // önce çarpım bölme işlemleri splitted array içi modifiye edilerek yaptırılır. yapılan çarpım/bölüm işlemi funcHolderdan çıkartılır
+    //sonrasında for döngüsünde toplama çıkarma işlemleri yapılır.
     for (let index = 0; index < splitted.length; index++) {
       switch (functionHolder[index]) {
         case "+":

@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   previousEquationText: {
     margin: 5,
-    textAlign: "left",
+    textAlign: "right",
     fontSize: 25,
   },
 });
