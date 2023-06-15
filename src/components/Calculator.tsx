@@ -162,8 +162,26 @@ export default function Calculator() {
       splitted[0] = (parseFloat(splitted[0]) * -1).toString();
     }
     console.log(functionHolder, "SPLITTTTTTED", splitted);
-    // önce çarpım bölme işlemleri splitted array içi modifiye edilerek yaptırılır. yapılan çarpım/bölüm işlemi funcHolderdan çıkartılır
-    //sonrasında for döngüsünde toplama çıkarma işlemleri yapılır.
+    // ÇARPIM BÖLÜM SW-CASE
+    for (let index = 0; index < splitted.length; index++) {
+      switch (functionHolder[index]) {
+        case "x":
+          splitted[index + 1] = (
+            parseFloat(splitted[index]) * parseFloat(splitted[index + 1])
+          ).toString();
+          splitted.splice(index, 1);
+          setFunctionHolder(functionHolder.splice(index, 1));
+          break;
+        case "/":
+          splitted[index + 1] = (
+            parseFloat(splitted[index]) / parseFloat(splitted[index + 1])
+          ).toString();
+          splitted.splice(index, 1);
+          setFunctionHolder(functionHolder.splice(index, 1));
+          break;
+      }
+    }
+
     for (let index = 0; index < splitted.length; index++) {
       switch (functionHolder[index]) {
         case "+":
@@ -178,16 +196,6 @@ export default function Calculator() {
         case "-":
           splitted[index + 1] = (
             parseFloat(splitted[index]) - parseFloat(splitted[index + 1])
-          ).toString();
-          break;
-        case "/":
-          splitted[index + 1] = (
-            parseFloat(splitted[index]) / parseFloat(splitted[index + 1])
-          ).toString();
-          break;
-        case "x":
-          splitted[index + 1] = (
-            parseFloat(splitted[index]) * parseFloat(splitted[index + 1])
           ).toString();
           break;
         case "%":
