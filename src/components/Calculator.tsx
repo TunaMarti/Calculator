@@ -3,16 +3,15 @@ import { View, StyleSheet, Text } from "react-native";
 import PreviousEquationText from "./PreviousEquationText";
 import ResultText from "./ResultText";
 import ArrButtons from "./ArrButtons";
-import { reverseString, multiplyDivide } from "./HelperFunctions";
+import {
+  reverseString,
+  multiplyDivide,
+  bracketRemove,
+  doAritmathics,
+  FindLastNonDigit,
+} from "./HelperFunctions";
 
 export default function Calculator() {
-  //   const text: string = "3x(-3)+6-5";
-  //   console.log(text.split(/(?<![(-])[\/x+%-](?![)])+/));
-  console.log(
-    parseFloat("(-6)".replace(/[()]/g, "")),
-    "  ---  ",
-    /[()]/.test("(-3)")
-  );
   const functionButtons = ["+/-", "%", "C"];
   const numberButtons = [
     "9",
@@ -163,11 +162,12 @@ export default function Calculator() {
                 resultText[lastCharIndRT]
               );
               if (resultText.charAt(lastCharIndRT).match(/[0-9]/)) {
+                const lastNonDigit = FindLastNonDigit(resultText);
                 setResultText(
                   [
-                    resultText.slice(0, lastCharIndRT),
+                    resultText.slice(0, lastNonDigit + 1),
                     "(-",
-                    resultText.slice(lastCharIndRT),
+                    resultText.slice(lastNonDigit + 1),
                     ")",
                   ].join("")
                 );
@@ -200,83 +200,23 @@ export default function Calculator() {
       "splitted length: ",
       splitted.length
     );
-    // ÇARPIM BÖLÜM SW-CASE
-    for (let index = 0; index < splitted.length; index++) {
-      if (/[()]/.test(splitted[index])) {
-        splitted[index] = splitted[index].replace(/[()]/, "");
-        console.log(
-          index,
-          " teki string ",
-          splitted[index],
-          "  PARSE   ",
-          parseFloat(splitted[index])
-        );
-      }
-    }
-    console.log(
-      "test: --------------   ",
 
-      splitted
+    splitted = bracketRemove(splitted);
+    const spltFncArr = multiplyDivide(splitted, functionHolder);
+    splitted = spltFncArr.splitArr;
+    setFunctionHolder(spltFncArr.funcHolderArr);
+    const artmSplit = doAritmathics(splitted, functionHolder);
+    splitted = artmSplit.splitArr;
+    setFunctionHolder(artmSplit.funcHolderArr);
+
+    setResultNumber(parseFloat(splitted[splitted.length - 1]));
+    setPreviousEquationText(resultText + "=" + splitted[splitted.length - 1]);
+
+    setResultText(
+      parseFloat(splitted[splitted.length - 1])
+        .toFixed(4)
+        .toString()
     );
-    for (let index = 0; index < splitted.length; index++) {
-      const spltFncArr = multiplyDivide(splitted, functionHolder, index);
-      splitted = spltFncArr.splitArr;
-      setFunctionHolder(spltFncArr.funcHolderArr);
-    }
-
-    //   switch (functionHolder[index]) {
-    //     case "x":
-    //       splitted[index + 1] = (
-    //         parseFloat(splitted[index]) * parseFloat(splitted[index + 1])
-    //       ).toString();
-    //       splitted.splice(index, 1);
-    //       setFunctionHolder(functionHolder.splice(index, 1));
-    //       break;
-    //     case "/":
-    //       splitted[index + 1] = (
-    //         parseFloat(splitted[index]) / parseFloat(splitted[index + 1])
-    //       ).toString();
-    //       splitted.splice(index, 1);
-    //       setFunctionHolder(functionHolder.splice(index, 1));
-    //       break;
-    //   }
-
-    for (let index = 0; index < splitted.length; index++) {
-      console.log(index, " teki string ", splitted[index]);
-      switch (functionHolder[index]) {
-        case "+":
-          console.log(
-            "topla",
-            parseFloat(splitted[index]) + parseFloat(splitted[index + 1])
-          );
-          splitted[index + 1] = (
-            parseFloat(splitted[index]) + parseFloat(splitted[index + 1])
-          ).toString();
-          break;
-        case "-":
-          splitted[index + 1] = (
-            parseFloat(splitted[index]) - parseFloat(splitted[index + 1])
-          ).toString();
-          break;
-        case "%":
-          splitted[index + 1] = (
-            parseFloat(splitted[index]) % parseFloat(splitted[index + 1])
-          ).toString();
-          break;
-
-        default:
-          break;
-      }
-      console.log(
-        functionHolder,
-        splitted[splitted.length - 1],
-        "splitted: ",
-        splitted
-      );
-      setResultNumber(parseFloat(splitted[splitted.length - 1]));
-      setPreviousEquationText(resultText + "=" + splitted[splitted.length - 1]);
-    }
-    setResultText(splitted[splitted.length - 1]);
     splitted = [];
   };
 
