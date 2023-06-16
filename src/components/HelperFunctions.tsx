@@ -46,10 +46,6 @@ export function doAritmathics(
   for (let index = 0; index < splitArr.length; index++) {
     switch (funcHolderArr[index]) {
       case "+":
-        console.log(
-          "topla",
-          parseFloat(splitArr[index]) + parseFloat(splitArr[index + 1])
-        );
         splitArr[index + 1] = (
           parseFloat(splitArr[index]) + parseFloat(splitArr[index + 1])
         ).toString();

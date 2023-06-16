@@ -46,9 +46,7 @@ export default function Calculator() {
         setResultText(resultText + newValue);
       }
     } else {
-      console.log("Geri ala basıldı");
       let lastChar = resultText[resultText.length - 1];
-      console.log("lastChar", lastChar);
       if (
         (lastChar == "x" ||
           lastChar == "-" ||
@@ -57,7 +55,6 @@ export default function Calculator() {
           lastChar == "%") &&
         resultText.length > 1
       ) {
-        console.log("1. ife girdi");
         if (resultText[resultText.length - 2] != "(") functionHolder.pop();
         setResultText(resultText.slice(0, -1));
       } else if (
@@ -68,7 +65,6 @@ export default function Calculator() {
           lastChar == "%") &&
         resultText.length == 1
       ) {
-        console.log("1. ife girdi");
         setResultText(resultText.slice(0, -1));
       } else if (
         !(
@@ -84,7 +80,6 @@ export default function Calculator() {
     }
   };
   const newFunctionButtonClick = (newValue: string) => {
-    console.log("NewVALUE: ", newValue, functionHolder);
     if (
       newValue == "+" ||
       newValue == "-" ||
@@ -100,12 +95,6 @@ export default function Calculator() {
         functionHolder.push(newValue);
         setResultText(resultText + newValue);
       }
-
-      console.log(
-        "Function holder after clicked an operator ",
-        functionHolder,
-        "\n"
-      );
     } else
       switch (newValue) {
         case "=":
@@ -120,7 +109,6 @@ export default function Calculator() {
           break;
         case "+/-":
           var lastOp = functionHolder[functionHolder.length - 1];
-          console.log("lastOp", lastOp, "functionHolder: ", functionHolder);
           //-----------------FUNCTION HOLDER BOSKEN BASILDIGINDA--------------------
           if (functionHolder.length == 0) {
             if (resultText.charAt(0) != "-") setResultText("-" + resultText);
@@ -135,15 +123,10 @@ export default function Calculator() {
               setResultText(
                 reverseString(reverseString(resultText).replace("+", "-"))
               );
-              console.log("replace to negative" + resultText.replace("+", "-"));
               functionHolder.pop();
               functionHolder.push(lastOp);
             } else if (lastOp == "-") {
               lastOp = "+";
-              console.log(
-                "replace to positive" +
-                  reverseString(resultText).replace("-", "+")
-              );
               setResultText(
                 reverseString(reverseString(resultText).replace("-", "+"))
               );
@@ -151,13 +134,6 @@ export default function Calculator() {
               functionHolder.push(lastOp);
             } else {
               let lastCharIndRT: number = resultText.length - 1;
-              console.log(
-                "lastCharIndRT -----------  ",
-                lastCharIndRT,
-                "------------",
-                "lastCharr ---  ",
-                resultText[lastCharIndRT]
-              );
               if (resultText.charAt(lastCharIndRT).match(/[0-9]/)) {
                 const lastNonDigit = FindLastNonDigit(resultText);
                 setResultText(
@@ -169,7 +145,6 @@ export default function Calculator() {
                   ].join("")
                 );
               } else if (resultText[resultText.length - 1] == ")") {
-                console.log("- parantezini düzeltme ifine girdi");
                 const lastIndex = resultText.lastIndexOf("(-");
                 if (lastIndex !== -1) {
                   const modifiedStr =
@@ -196,13 +171,6 @@ export default function Calculator() {
       splitted = resultText.split(/(?<![(-])[\/x+%-](?![)])+/);
       splitted[0] = (parseFloat(splitted[0]) * -1).toString();
     }
-    console.log(
-      functionHolder,
-      "SPLITTTTTTED",
-      splitted,
-      "splitted length: ",
-      splitted.length
-    );
 
     splitted = bracketRemove(splitted);
     const spltFncArr = multiplyDivide(splitted, functionHolder);
