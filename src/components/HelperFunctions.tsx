@@ -89,7 +89,12 @@ export function FindLastNonDigit(str: string) {
   let lastNonDigitIndex = -1;
 
   for (let i = str.length - 1; i >= 0; i--) {
-    if (isNaN(Number(str[i])) && str[i] != ".") {
+    if (
+      isNaN(Number(str[i])) &&
+      str[i] != "." &&
+      str[i] != "(" &&
+      str[i] != ")"
+    ) {
       lastNonDigitIndex = i;
       break;
     }

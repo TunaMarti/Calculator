@@ -10,6 +10,7 @@ import {
   doAritmathics,
   FindLastNonDigit,
 } from "./HelperFunctions";
+import { mod } from "mathjs";
 
 export default function Calculator() {
   const functionButtons = ["+/-", "%", "C"];
@@ -57,7 +58,7 @@ export default function Calculator() {
         resultText.length > 1
       ) {
         console.log("1. ife girdi");
-        functionHolder.pop();
+        if (resultText[resultText.length - 2] != "(") functionHolder.pop();
         setResultText(resultText.slice(0, -1));
       } else if (
         (lastChar == "x" ||
@@ -148,11 +149,7 @@ export default function Calculator() {
               );
               functionHolder.pop();
               functionHolder.push(lastOp);
-            }
-            // '+' ve '-' dışındaki oparatörlerde oparatorden sonra SAYI VARSA parantez aç ve '-' işareti koy ve sayıdan sonraki giriş rakam değilse parantezi kapat
-            //                                                      SAYI YOKSA parantez aç ve '-' işareti koy ve sayı girişi bekle
-            // ****************    splitte parantezleri sil ve sayının negatif olmasını düzenle  ****************
-            else {
+            } else {
               let lastCharIndRT: number = resultText.length - 1;
               console.log(
                 "lastCharIndRT -----------  ",
@@ -171,9 +168,15 @@ export default function Calculator() {
                     ")",
                   ].join("")
                 );
-                /// herhangi bir sayı girilip bir oparatore basıldığında parantez kapatılmalı
-              } else {
-                setResultText(resultText + "(-");
+              } else if (resultText[resultText.length - 1] == ")") {
+                console.log("- parantezini düzeltme ifine girdi");
+                const lastIndex = resultText.lastIndexOf("(-");
+                if (lastIndex !== -1) {
+                  const modifiedStr =
+                    resultText.slice(0, lastIndex) +
+                    resultText.slice(lastIndex + 2, resultText.length - 1);
+                  setResultText(modifiedStr);
+                }
               }
             }
           }
@@ -210,11 +213,13 @@ export default function Calculator() {
     setFunctionHolder(artmSplit.funcHolderArr);
 
     setResultNumber(parseFloat(splitted[splitted.length - 1]));
-    setPreviousEquationText(resultText + "=" + splitted[splitted.length - 1]);
+    setPreviousEquationText(
+      resultText + "=" + parseFloat(splitted[splitted.length - 1]).toFixed(3)
+    );
 
     setResultText(
       parseFloat(splitted[splitted.length - 1])
-        .toFixed(4)
+        .toFixed(3)
         .toString()
     );
     splitted = [];
